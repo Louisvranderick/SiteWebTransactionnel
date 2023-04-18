@@ -1,0 +1,258 @@
+
+<!--  
+    Louis Vranderick Matricule:20211092
+    Kevin Fuss Matricule:20246906
+    Shayan Nicolas Hollet Matricule: 20146766
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>OnlineShop - Panier</title>
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"> 
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+
+    $.getJSON("assets/data/products.json", function (data) {
+      var c = localStorage.getItem("count"); 
+      if (c == 0) { 
+        $('#count').hide();
+      }
+      $('#count').html("<span>"+c+"</span>");
+        var don = []; 
+        $.each(data , function(key, val) {  
+              var feat = [];       
+              $.each(val.features, function(key, val) {feat.push("<li>"+val+"</li>")})
+              don.push([val.id, val.name, val.price, val.image, val.name, feat, val.description])
+            })
+        var produ = localStorage.getItem("id");
+        produ -= 1; 
+
+        function parsecart(){
+        var cart = localStorage.getItem("cart"); 
+        cart = cart.slice(0 , -1);
+        cart = "[" + cart + "]";   
+        cart = JSON.parse(cart); 
+        return cart
+        }
+
+        $('.link').on('click' , function(){
+          console.log("hello"); 
+        })
+
+        function unParseCart(){ 
+          cart = JSON.stringify(cart);
+          cart = cart.replace(/[\[\]']+/g,'');
+          cart = cart + ",";
+          localStorage.setItem("cart",cart)
+        }
+
+        cart = parsecart(); 
+
+        function updatecart(){
+          if (localStorage.getItem("cart") == "") { 
+          $('#shoppin').html("<h1>"+"Panier"+"</h1>"+"<p>"+"Aucun Produit dans le panier"+"</p>")
+          } else {
+          cart = parsecart();
+          cart.sort(function(a, b) { 
+                    if (a.name < b.name) return -1;
+                    if (a.name > b.name) return 1;
+                    return 0;
+                });
+                
+          var i = 0;
+          var itemsInCart = []; 
+         $.each(cart , function(key,val){ 
+           var quan = parseFloat(val.price) * parseFloat(val.quant);
+           quan = Math.round(quan * 100) / 100;
+           itemsInCart.push("<tr id="+i+" data="+val.id+">"+
+            "<td><button id="+"delete"+val.id+(' ').repeat(2)+"class="+"remove-item-button"+(' ').repeat(2)+"title="+"Supprimer"+"><i class="+'"'+"fa fa-times"+'"'+"></i></button></td>"+
+            "<td><a class="+"link"+" href="+"#"+">"+val.name+"</a></td>"+
+            "<td class="+"price"+">"+val.price+"&thinsp;$</td>"+
+            "<td>"+
+              "<div class="+"row"+">"+
+                "<div class="+"col"+">"+
+                  "<button class="+"remove-quantity-button"+(' ').repeat(2)+"title="+"Retirer"+(' ').repeat(2)+"><i class="+'"'+"fa fa-minus"+'"'+"></i></button>"+
+                "</div>"+
+                "<div class=quantity"+(' ').repeat(2)+"class="+"col"+">"+val.quant+"</div>"+
+                "<div class="+"col"+">"+
+                  "<button class="+"add-quantity-button"+(' ').repeat(2)+"title="+"Ajouter"+"><i class="+'"'+"fa fa-plus"+'"'+"></i></button>"+
+                "</div>"+
+              "</div>"+
+            "</td>"+
+            "<td class="+"itemsprice"+">"+quan+"&thinsp;$</td>"+
+          "</tr>")
+          i++
+         });
+         $('#add').html(itemsInCart);
+        cart = JSON.stringify(cart);
+        cart = cart.replace(/[\[\]']+/g,'');
+        cart = cart + ",";
+        localStorage.setItem("cart",cart)
+        $('.link').on('click' , function(){
+        var op = $(this).closest('tr').attr("data"); 
+        console.log(op);
+        localStorage.setItem("id", op); 
+        $(this).attr("href", "./product.html")
+        });
+
+        } } 
+         updatecart();
+
+        $('.add-quantity-button').on('click' , function(){ 
+          var cart = parsecart();
+          var op = $(this).closest('tr').attr("id"); 
+          cart[op].quant += 1; 
+          $('#'+op+(' ').repeat(2)+'.quantity').html(cart[op].quant);
+          var qua = parseFloat(cart[op].quant) * parseFloat(cart[op].price); 
+          qua = Math.round(qua * 100) / 100; 
+          $('#'+op+(' ').repeat(2)+'.itemsprice').html(qua+"&thinsp;$");
+          cart = JSON.stringify(cart);
+          cart = cart.replace(/[\[\]']+/g,'');
+          cart = cart + ",";
+          localStorage.setItem("cart",cart)
+          var temp = localStorage.getItem("count"); 
+          temp = parseInt(temp); 
+          temp += 1; 
+          $('#count').html("<span>"+temp+"</span>");
+          localStorage.setItem("count",temp.toString());
+          updateTot();
+          }) 
+
+        $('.remove-quantity-button').on('click' , function(){ 
+          var cart = parsecart();
+          var op = $(this).closest('tr').attr("id"); 
+          if (cart[op].quant == 1) { 
+            $('#'+op+(' ').repeat(2)+'.quantity').attr("disabled");
+          } else { 
+          cart[op].quant -= 1; 
+          $('#'+op+(' ').repeat(2)+'.quantity').html(cart[op].quant);
+          var qua = parseFloat(cart[op].quant) * parseFloat(cart[op].price); 
+          qua = Math.round(qua * 100) / 100; 
+          $('#'+op+(' ').repeat(2)+'.itemsprice').html(qua+"&thinsp;$");
+          cart = JSON.stringify(cart);
+          cart = cart.replace(/[\[\]']+/g,'');
+          cart = cart + ",";
+          localStorage.setItem("cart",cart)
+          var temp = localStorage.getItem("count"); 
+          temp = parseInt(temp); 
+          temp -= 1; 
+          $('#count').html("<span>"+temp+"</span>");
+          localStorage.setItem("count",temp.toString());
+          updateTot();
+          }
+        }) 
+
+        $('.remove-item-button').on('click' , function(){  
+          if (confirm("Voulez- vous supprimer le produit du panier ?") == true) {
+            var op = $(this).closest('tr').attr("id"); 
+            var value = cart[op].quant ; 
+            $('#'+op).empty();
+            cart = parsecart(); 
+            cart.splice(op , 1);
+            cart = JSON.stringify(cart);
+            cart = cart.replace(/[\[\]']+/g,'');
+            cart = cart + ",";
+            if (cart == ','){
+              localStorage.setItem("cart","");
+              updatecart();
+            } else {
+            localStorage.setItem("cart",cart); }
+            var temp = localStorage.getItem("count");  
+            temp = parseInt(temp); 
+            temp -= value ; 
+            $('#count').html("<span>"+temp+"</span>");
+            localStorage.setItem("count" , temp.toString());
+            cart = parsecart();
+            var tot = 0;
+            $.each(cart, function(key , val){
+              const temp = parseFloat(val.price)* parseFloat(val.quant);
+              tot += temp;
+            });
+            tot = Math.round(tot * 100) / 100;
+            $('#total-amount').html("Total: <strong>"+tot+"&thinsp;$</strong>")
+        }
+      });
+
+
+        function updateTot(){ 
+        cart = parsecart();
+        var tot = 0;
+        $.each(cart, function(key , val){
+          const temp = parseFloat(val.price)* parseFloat(val.quant);
+          tot += temp;
+        });
+        tot = Math.round(tot * 100) / 100;
+        $('#total-amount').html("Total: <strong>"+tot+"&thinsp;$</strong>") } 
+
+        updateTot();
+
+        $('#trash').on('click' ,function(){ 
+          localStorage.setItem("cart", ''); 
+          $('#add').empty(); 
+          tot = 0; 
+          $('#total').html("Total: <strong>"+tot+"&thinsp;$</strong>") 
+          localStorage.setItem("count" , 0);
+          updatecart();
+          updateTot();
+          $('#count').hide();
+      })
+        });
+    
+
+  </script>
+</head>
+<body>
+  <div class="wrapper">
+  <header>
+    <div class="contenu">
+    <a href="./index.html" class="header-left">
+    <img class="navlogo" alt="logo" src="./assets/img/logo.svg" title="Accueil">
+    </a>
+    <nav>
+      <ul>
+      	<li class="navitem"><a class="navitem2" href="./index.html">Accueil</a></li>
+      	<li class="navitem"><a class="navitem2" href="./products.html">Produits</a></li>
+      	<li class="navitem"><a class="navitem2" href="./contact.html">Contact</a></li>
+      	<li class="navitem">
+          <a class="shopping-cart" href="./shopping-cart.html" title="panier">
+          <span class="fa-stack fa-lg"> 
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i> 
+          <i class="fa fa-shopping-cart fa-stack-1x"></i> 
+          </span> 
+          <div id="count" class="count">
+          </div>
+          </a>
+          </a></li>
+      </ul>
+    </nav>
+  </div>
+  </header>
+  <main>
+    <article id="shoppin">
+      <h1>Panier</h1>
+      <table class="table shopping-cart-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Produit</th>
+            <th>Prix unitaire</th>
+            <th>Quantité</th>
+            <th>Prix</th>
+          </tr>
+        </thead>
+        <tbody id="add">
+        </tbody>
+      </table>
+      <p id ="total-amount" class="shopping-cart-total"></p>
+      <a class="btn pull-right" href="./order.html">Commander <i class="fa fa-angle-double-right"></i></a>
+      <button id="trash" class="btn"><i class="fa fa-trash-o"></i>&nbsp; Vider le panier</button>
+    </article>
+  </main>
+</div>
+  <footer>
+    <p>par Louis Vranderick Matricule:20211092, Kevin Fuss Matricule:20246906 et Shayan Nicolas Hollet Matricule: 20146766</p><br>
+  </footer>
+</body>
+</html>

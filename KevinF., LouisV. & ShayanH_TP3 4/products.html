@@ -1,0 +1,229 @@
+<!--  
+    Louis Vranderick Matricule:20211092
+    Kevin Fuss Matricule:20246906
+    Shayan Nicolas Hollet Matricule: 20146766
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>OnlineShop - Produits</title>
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"> 
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+        $.getJSON("assets/data/products.json", function (data) {
+            var c = localStorage.getItem("count"); 
+              if (c == null || c == 0) { 
+                $('#count').hide();
+              }
+              $('#count').html("<span>"+c+"</span>");
+            var items = []; 
+            var open = [];
+            $.each(data, function (key, val) {
+                items.push(["<div id="+val.id+ ' '.repeat(2) + "class="+"product"+val.category+' '.repeat(2) +"class=product"+">"+"<a href="+"./product.html"+ ' '.repeat(2) + "title="+"En savoir plus... >"+"<h2>" + val.name + "</h2>"+"<img src="+"/assets/img/"+val.image+">"+"</p class="+"class="+"price"+">"+"<small>Prix</small>"+' '.repeat(2)+val.price+"</p>"+"</div>", val.price, val.name]);  
+                });
+
+
+            $.each(items, function(index){ 
+                open.push(items[index][0])
+            })
+
+
+            $('#normal').html(open);    
+
+            $('#normal div').on('click', function(){ 
+                var div_id = $(this).attr("id");
+                localStorage.setItem("id" , div_id);
+            });
+
+
+            $('#buttonprix1').on('click',function(){  
+                items.sort(function(a, b) { 
+                    return a[1] - b[1];
+                }); 
+                open = [];
+            $.each(items, function(index){ 
+                open.push(items[index][0])
+                })
+            $('#normal').html(open); 
+            $('#normal div').on('click', function(){ 
+                var div_id = $(this).attr("id");
+                localStorage.setItem("id" , div_id);
+            });
+            $('#product-criteria > button').removeClass("selected")
+                $('#buttonprix1').addClass("selected");
+            });
+
+            $('#buttonprix2').on('click',function(){  
+                items.sort(function(a, b) { 
+                    return b[1] - a[1];
+                }); 
+                open = [];
+            $.each(items, function(index){ 
+                open.push(items[index][0])
+                })
+            $('#normal').html(open); 
+            $('#normal div').on('click', function(){ 
+                var div_id = $(this).attr("id");
+                localStorage.setItem("id" , div_id);
+            });
+            $('#product-criteria > button').removeClass("selected")
+                $('#buttonprix2').addClass("selected");
+            });
+
+            $('#buttonAZ').on('click',function(){  
+                items.sort(function(a, b) { 
+                    if (a[2] < b[2]) return -1;
+                    if (a[2] > b[2]) return 1;
+                    return 0;
+                });
+                open = [];
+            $.each(items, function(index){ 
+                open.push(items[index][0])
+                })
+            $('#normal').html(open); 
+            $('#normal div').on('click', function(){ 
+                var div_id = $(this).attr("id");
+                localStorage.setItem("id" , div_id);
+            });
+            $('#product-criteria > button').removeClass("selected")
+                $('#buttonAZ').addClass("selected");
+            });
+
+            $('#buttonZA').on('click',function(){  
+                items.sort(function(a, b) { 
+                    if (a[2] < b[2]) return 1;
+                    if (a[2] > b[2]) return -1;
+                    return 0;
+                });
+                open = [];
+            $.each(items, function(index){ 
+                open.push(items[index][0])
+                })
+            $('#normal').html(open); 
+            $('#normal div').on('click', function(){ 
+                var div_id = $(this).attr("id");
+                localStorage.setItem("id" , div_id);
+            });
+            $('#product-criteria > button').removeClass("selected")
+                $('#buttonZA').addClass("selected");
+            });
+
+            $('#buttonOrdi').on('click',function(){ 
+                $('#number').html("4 Produits");
+                $('#product-categories > button').removeClass("selected")
+                $('#buttonOrdi').addClass("selected");
+                $('.productcameras').hide();
+                $('.productscreens').hide();
+                $('.productconsoles').hide(); 
+                $('.productcomputers').show();
+            });
+            $('#buttonEcran').on('click',function(){
+                $('#number').html("2 Produits");
+                $('#product-categories > button').removeClass("selected")
+                $('#buttonEcran').addClass("selected");
+                $('.productcameras').hide();
+                $('.productcomputers').hide();
+                $('.productconsoles').hide();
+                $('.productscreens').show();
+            });
+            $('#buttonConsoles').on('click',function(){
+                $('#number').html("4 Produits");
+                $('#product-categories > button').removeClass("selected")
+                $('#buttonConsoles').addClass("selected");
+                $('.productcameras').hide();
+                $('.productcomputers').hide();
+                $('.productscreens').hide(); 
+                $('.productconsoles').show();
+            });
+            $('#buttonCameras').on('click',function(){
+                $('#number').html("3 Produits");
+                $('#product-categories > button').removeClass("selected")
+                $('#buttonCameras').addClass("selected");
+                $('.productscreens').hide();
+                $('.productcomputers').hide();
+                $('.productconsoles').hide();
+                $('.productcameras').show();
+            });
+            $('#buttonAll').on('click',function(){ 
+                $('#number').html("13 produits");
+                $('#product-categories > button').removeClass("selected")
+                $('#buttonAll').addClass("selected");
+                $('.productcameras').show();
+                $('.productscreens').show();
+                $('.productconsoles').show();
+                $('.productcomputers').show();
+            
+        });
+    });
+  </script>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="contenu">
+            <a href="./index.html" class="header-left">
+            <img class="navlogo" alt="logo" src="./assets/img/logo.svg" title="Accueil">
+            </a>
+            <nav>
+              <ul>
+                  <li class="navitem"><a class="navitem2" href="./index.html">Accueil</a></li>
+                  <li class="navitem"><a class="navitem2 active" href="./products.html">Produits</a></li>
+                  <li class="navitem"><a class="navitem2" href="./contact.html">Contact</a></li>
+                  <li class="navitem">
+                  <a class="shopping-cart" href="./shopping-cart.html" title="panier">
+                  <span class="fa-stack fa-lg"> 
+                  <i class="fa fa-circle fa-stack-2x fa-inverse"></i> 
+                  <i class="fa fa-shopping-cart fa-stack-1x"></i> 
+                  </span> 
+                  <div id="count" class="count">
+                  </div>
+                  </a>
+                  </a></li>
+              </ul>
+            </nav>
+            </div>
+          </header>
+    <main>
+    <div class = "productgrid">
+    <section class="sidebar" aria-label="Filtres"> 
+        <section>
+        <h2>Catégories</h2>
+        <div id="product-categories">
+            <button id="buttonCameras">Appareils photo</button>
+            <button id="buttonConsoles">Consoles</button>
+            <button id="buttonEcran">Écrans</button>
+            <button id="buttonOrdi" >Ordinateurs</button>
+            <button id="buttonAll" class = "selected">Tous les produits</button>
+        </div>
+        </section>
+        <section>
+        <h2>Classement</h2>
+        <div id="product-criteria">
+            <button id="buttonprix1" class="selected">Prix (bas-haut)</button>
+            <button id="buttonprix2">Prix (haut-bas)</button>
+            <button id="buttonAZ">Nom (A-Z)</button>
+            <button id="buttonZA">Nom (Z-A)</button>
+        </div>
+        </section>
+    </section>
+    <div id="productlist" class="productlist">
+        <div id="producttitle" class="producttitle"> 
+            <h1>Produits</h1>
+            <p id="number">13 Produits</p>
+        </div>   
+        <div id="normal" class="productgrid2"></div>
+        <div id="AZ" class="productgrid2"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </main>
+    </div>
+<footer>
+    <p>Louis Vranderick Matricule:20211092, Kevin Fuss Matricule:20246906 et Shayan Nicolas Hollet Matricule: 20146766</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!--  
+    Louis Vranderick Matricule:20211092
+    Kevin Fuss Matricule:20246906
+    Shayan Nicolas Hollet Matricule: 20146766
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"> 
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+  <script> 
+    $( function(){
+      var c = localStorage.getItem("count"); 
+      if (c == 0 || c == null) { 
+        $('#count').hide();
+      } else {
+      $('#count').html("<span>"+c+"</span>"); }
+
+      var t = localStorage.getItem("name");  
+      $('h1').html(t);
+
+
+    })
+  </script>
+  <title>OnlineShop - Confirmation</title>
+</head>
+<body> 
+  <div class="wrapper">
+  <header>
+    <div class="contenu">
+    <a href="./index.html" class="header-left">
+    <img class="navlogo" alt="logo" src="./assets/img/logo.svg" title="Accueil">
+    </a>
+    <nav>
+      <ul>
+      	<li class="navitem"><a class="navitem2" href="./index.html">Accueil</a></li>
+      	<li class="navitem"><a class="navitem2" href="./products.html">Produits</a></li>
+      	<li class="navitem"><a class="navitem2" href="./contact.html">Contact</a></li>
+      	<li class="navitem">
+          <a class="shopping-cart" href="./shopping-cart.html" title="panier">
+          <span class="fa-stack fa-lg"> 
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i> 
+          <i class="fa fa-shopping-cart fa-stack-1x"></i> 
+          </span> 
+          <div id="count" class="count">
+          </div>
+          </a>
+          </a></li>
+      </ul>
+    </nav>
+  </div>
+  </header>
+<main>
+  <article>
+    <h1></h1>
+    <p>Votre numéro de confirmation est le <strong>00001</strong>.</p>
+  </article>
+</main>
+</div>
+<footer>
+  <p>par Louis Vranderick Matricule:20211092, Kevin Fuss Matricule:20246906 et Shayan Nicolas Hollet Matricule: 20146766</p><br>
+</footer>
+</body>
+</html>

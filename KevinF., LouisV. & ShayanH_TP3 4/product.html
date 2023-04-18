@@ -1,0 +1,131 @@
+<!--  
+    Louis Vranderick Matricule:20211092
+    Kevin Fuss Matricule:20246906
+    Shayan Nicolas Hollet Matricule: 20146766
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>OnlineShop - Produit</title>
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"> 
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+
+            $.getJSON("assets/data/products.json", function (data) {
+            var don = [];
+            var c = localStorage.getItem("count"); 
+              if (c == null || c == 0 ) { 
+                $('#count').hide();
+              }
+              $('#count').html("<span>"+c+"</span>");
+            
+            $.each(data , function(key, val) {  
+              var feat = [];       
+              $.each(val.features, function(key, val) {feat.push("<li>"+val+"</li>")})
+              don.push([val.id, val.name, val.price, val.image, val.name, feat, val.description])
+            });
+            var produ = localStorage.getItem("id");
+            var Lid = produ;
+            produ -= 1;
+            $('h1').html(don[produ][1]); 
+            $('#title > img').attr("src", "./assets/img/"+don[produ][3]);
+            $('#description').html(don[produ][6])  
+            $('#cara').html(don[produ][5])
+            $('.formprice > p').html("Prix: <strong>"+don[produ][2]+"</strong>")
+
+            function appendToStorage(name, data){
+              var old = localStorage.getItem(name);
+              if(old === null) old = "";
+              localStorage.setItem(name, old + data);} 
+              
+
+            
+            $('#btn1').on('click', function(){         
+              var bla = $('#quantity').val();  
+              if (bla == 0) { 
+                alert("rien n'a été ajouté panier car la quantité indiqué était 0")
+              } else {
+              appendToStorage("cart" , "{"+'"'+"name"+'"'+":"+'"'+don[produ][1]+'"'+","+'"'+"price"+'"'+":"+don[produ][2]+","+'"'+"id"+'"'+":"+don[produ][0]+","+'"'+"quant"+'"'+":"+bla+"},");
+              }
+              var count = localStorage.getItem("count"); 
+              if (count == undefined) { 
+                count = 0;
+              } 
+              bla = parseInt(bla);
+              count = parseInt(count);
+              count += bla;
+              localStorage.setItem("count", count.toString()); 
+  
+            });
+            var z = localStorage.getItem("count")
+            $('#count').html("<span>"+z+"</span>");
+            });
+  </script> 
+
+</head>
+<body>
+
+  <div class="wrapper">
+    <header>
+      <div class="contenu">
+      <a href="./index.html" class="header-left">
+      <img class="navlogo" alt="logo" src="./assets/img/logo.svg" title="Accueil">
+      </a>
+      <nav>
+        <ul>
+          <li class="navitem"><a class="navitem2" href="./index.html">Accueil</a></li>
+          <li class="navitem"><a class="navitem2" href="./products.html">Produits</a></li>
+          <li class="navitem"><a class="navitem2" href="./contact.html">Contact</a></li>
+          <li class="navitem">
+            <a class="shopping-cart" href="./shopping-cart.html" title="panier">
+            <span class="fa-stack fa-lg"> 
+            <i class="fa fa-circle fa-stack-2x fa-inverse"></i> 
+            <i class="fa fa-shopping-cart fa-stack-1x"></i> 
+            </span> 
+            <div id="count" class="count">
+            </div>
+            </a>
+            </a></li>
+        </ul>
+      </nav>
+    </div>
+    </header>
+  <main>
+    <div class="gridcontent"> 
+        <div id="title">
+          <h1></h1>
+          <img alt="" src="">
+      </div>
+      <div class="description">
+        <section>
+          <h2>Description</h2>
+          <p id="description"></p>
+        </section>
+        <section>
+          <h2>Caractéristiques</h2>
+            <ul id="cara">
+            </ul>
+        </section>
+          <hr>
+        <div class="formprice">
+          <p></p>
+          <form id="ajout">
+            <label for="product-quantity">Quantité:</label>
+            <input class="input" type="number" min="0" placeholder="0" id="quantity">
+            <button class = "btn" title="Ajouter au panier" type="submit" value="1" id="btn1"> 
+              <i class="fa fa-cart-plus"></i>
+              Ajouter
+            </button>
+          </form>
+        </div>
+        </div>
+    </div>
+  </main>
+  </div>
+  <footer>
+    <p>Louis Vranderick Matricule:20211092, Kevin Fuss Matricule:20246906 et Shayan Nicolas Hollet Matricule: 20146766</p>
+  </footer>
+</body> 

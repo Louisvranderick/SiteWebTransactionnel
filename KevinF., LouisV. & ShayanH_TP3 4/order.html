@@ -1,0 +1,187 @@
+<!--  
+    Louis Vranderick Matricule:20211092
+    Kevin Fuss Matricule:20246906
+    Shayan Nicolas Hollet Matricule: 20146766
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OnlineShop - Commande</title>
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="./assets/js/jquery.validate.min.js"></script> 
+  <script type="text/javascript" src="./assets/js/additional-methods.min.js"></script> 
+  <script type="text/javascript" src="./assets/js/messages_fr.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
+    <script>
+
+        $(function () {
+            var c = localStorage.getItem("count");
+            console.log(c);
+            if (c == 0 || c == null) {
+                $('#count').hide();
+            } else {
+                $('#count').html("<span>" + c + "</span>");
+            }
+            $.validator.addMethod("creditCardExpiry", function (value, element) {
+                return this.optional(element) || /^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(value);
+            });
+
+            let form = $("#order-form");
+            let firstNameField = $("#first-name");
+            let nameField = $("#last-name");
+            let emailField = $("#email");
+            let phoneField = $("#phone");
+            let creditCardField = $("#credit-card");
+            let creditCardExpField = $("#credit-card-expiry");
+
+            form.validate({
+                rules: {
+                    firstName: {
+                        required: true,
+                        minlength: 2
+                    },
+                    name: {
+                        required: true,
+                        minlength: 2
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phone: {
+                        required: true,
+                        phoneUs: true
+                    },
+                    creditCard: {
+                        required: true,
+                        length: 16
+                    },
+                    creditCardExp: {
+                        required: true,
+                        creditCardExpiry: true
+                    }
+                },
+                messages: {
+                    firstName: {
+                        required: "Veuillez entrer votre prenom",
+                        minlength: "Votre prenom doit contenir au moins deux caracteres"
+                    },
+                    name: {
+                        required: "Veuillez entrer votre nom de famille",
+                        minlength: "Votre nom de famille doit contenir au moins deux caracteres"
+                    },
+                    email: {
+                        required: "Veuillez entrer votre adresse courriel",
+                        email: "Veuillez entrer une adresse courriel valide"
+                    },
+                    phone: {
+                        required: "Veuillez entrer votre numero de telephone",
+                        phoneUs: "Veuillez entrer un numero de telephone canadien valide"
+                    },
+                    creditCard: {
+                        required: "Veuillez entrer votre numero de carte de credit",
+                        length: "Veuillez entrer un numero de carte de credit valide a 16 chiffres"
+                    },
+                    creditCardExp: {
+                        required: "Veuillez entrer la date d'expiration de votre carte de credit",
+                        creditCardExpiry: "Veuillez entrer une date d'expiration valide"
+                    }
+                },
+                submitHandler: function (form) {
+                    let formData = {
+                        name: nameField.val(),
+                        email: emailField.val(),
+                        firstName: firstNameField.val(),
+                        phone: phoneField.val(),
+                        creditCard: creditCardField.val(),
+                        creditCardExp: creditCardExpField.val()
+                    };
+                }
+            });
+
+
+            $(function () {
+                localStorage.setItem("name", nameField.val());
+            })
+
+
+        });
+
+    </script>
+
+
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="contenu">
+                <a href="./index.html" class="header-left">
+                    <img class="navlogo" alt="logo" src="./assets/img/logo.svg" title="Accueil">
+                </a>
+                <nav>
+                    <ul>
+                        <li class="navitem"><a class="navitem2" href="./index.html">Accueil</a></li>
+                        <li class="navitem"><a class="navitem2" href="./products.html">Produits</a></li>
+                        <li class="navitem"><a class="navitem2" href="./contact.html">Contact</a></li>
+                        <li class="navitem">
+                            <a class="shopping-cart" href="./shopping-cart.html" title="panier">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                                    <i class="fa fa-shopping-cart fa-stack-1x"></i>
+                                </span>
+                                <div id="count" class="count">
+                                </div>
+                            </a>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <main>
+            <article>
+                <h1>Commande</h1>
+                <form id="order-form" action="./confirmation.html" method="post">
+                    <h2>Contact</h2>
+                    <div class="grid-container-c">
+                        <div class="grid-item-c1"><label for="first-name">Prénom</label></div>
+                        <div><label for="last-name">Nom</label></div>
+
+                        <div class="grid-item-c1"><input id="first-name" name="first-name" type="text"
+                                placeholder="Prénom" required></div>
+                        <div><input id="last-name" name="last-name" type="text" placeholder="Nom" required></div>
+
+                        <div class="grid-item-c1"><label for="email">Adresse courriel</label></div>
+                        <div><label for="phone">Téléphone</label></div>
+
+                        <div class="grid-item-c1"><input id="email" name="email" type="email"
+                                placeholder="Adresse courriel" required></div>
+                        <div><input id="phone" name="phone" type="tel" placeholder="###-###-####" required></div>
+                    </div>
+                    <h2>Paiement</h2>
+                    <div class="grid-container-d">
+                        <div class="grid-item-c1"><label for="credit-card">Numéro de carte de crédit</label></div>
+                        <div><label for="credit-card-expiry">Expiration (mm/aa)</label></div>
+
+                        <div class="grid-item-c1"><input id="credit-card" name="credit-card" type="text"
+                                placeholder="•••• •••• •••• ••••" required></div>
+                        <div><input id="credit-card-expiry" name="credit-card-expiry" type="text" placeholder="mm/aa"
+                                required></div>
+                    </div>
+                    <button href="./confirmation.html" type="submit" class="btn" id="order-btn">Payer <b>>></b></button>
+                </form>
+            </article>
+        </main>
+    </div>
+    <footer>
+        <p>par Louis Vranderick Matricule:20211092, Kevin Fuss Matricule:20246906 et Shayan Nicolas Hollet Matricule:
+            20146766</p><br>
+    </footer>
+</body>
+
+</html>
